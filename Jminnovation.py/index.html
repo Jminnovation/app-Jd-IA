@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JD - Acompañante Virtual</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>¡Bienvenido a JD!</h1>
+        <p>Tu acompañante virtual .</p>
+    </header>
+    <main>
+        <section id="login">
+            <h2>Iniciar sesión</h2>
+            <input type="text" id="usuario" placeholder="Usuario">
+            <button onclick="validarUsuario()">Validar usuario</button>
+            <div class="contenedor-dactilar">
+              <div class="fondo-circular">
+                <button id="btn-dactilar" type="button">
+                  <span>
+                    <!-- SVG de huella dactilar -->
+                    <svg width="44" height="44" viewBox="0 0 48 48" fill="none">
+          <path d="M24 44c-8 0-14-6-14-14V24a14 14 0 1128 0v6c0 8-6 14-14 14z" stroke="#001f4d" stroke-width="2.5" fill="none"/>
+          <path d="M24 36c-4 0-8-4-8-8v-4a8 8 0 1116 0v4c0 4-4 8-8 8z" stroke="#001f4d" stroke-width="2" fill="none"/>
+          <path d="M24 28a4 4 0 100-8 4 4 0 000 8z" stroke="#001f4d" stroke-width="1.5" fill="none"/>
+        </svg>
+                  </span>
+                </button>
+              </div>
+              <span id="mensaje-dactilar" style="display:block; margin-top:18px; color:#4B0082;"></span>
+            </div>
+            <div id="mensaje-usuario"></div>
+        </section>
+
+        <section id="registro" style="display: none;">
+            <h2>Registrar Usuario</h2>
+            <input type="text" id="nombre" placeholder="Nombre">
+            <input type="email" id="correo" placeholder="Correo electrónico">
+            <button onclick="registrarUsuario()">Registrar</button>
+            <div id="mensaje-registro"></div>
+             <span class="icono-volver" id="volver-registro" title="Volver al login">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6200ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="11" stroke="#e0e0ff" stroke-width="2.5" fill="#f6f6ff"/>
+                    <polyline points="14 8 10 12 14 16"/>
+                </svg>
+            </span>
+        </section>
+
+        <div id="modulo" style="display: none;">
+            <span class="icono-volver" title="Volver al menú de módulos">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6200ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="11" stroke="#e0e0ff" stroke-width="2.5" fill="#f6f6ff"/>
+                    <polyline points="14 8 10 12 14 16"/>
+                </svg>
+            </span>
+            <form id="formulario">
+                <label for="pregunta">Hazme tu consulta:</label>
+                <input type="text" id="pregunta" placeholder="?" />
+                <button type="submit">Enviar</button>
+            </form>
+            <div id="respuesta-contenedor">
+                <div id="respuesta-box">
+                    <div id="sujeto-pregunta"></div>
+                    <div id="respuesta"></div>
+                </div>
+                <div id="imagenes"></div>
+            </div>
+        </div>
+          <!-- Ventana de respuesta independiente -->
+        <div id="ventana-respuesta" style="display: none;">
+            <div id="respuesta-box">
+                <div id="sujeto-pregunta"></div>
+                <div id="respuesta"></div>
+            </div>
+            <div id="imagenes"></div>
+            <button id="volver-consulta" style="margin-top:20px;">Volver a consulta</button>
+        </div>
+        
+      <div id="modulo-video-voz" style="display: none;">
+            <span class="icono-volver" title="Volver al menú de módulos">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6200ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="11" stroke="#e0e0ff" stroke-width="2.5" fill="#f6f6ff"/>
+                    <polyline points="14 8 10 12 14 16"/>
+                </svg>
+            </span>
+            <button id="btn-voz">Hablame... !</button>
+            <span id="texto-voz"></span>
+            <div id="video-respuesta" style="margin-top:20px;"></div>
+        </div>
+        
+        <section id="opciones-usuario-incorrecto" style="display: none;">
+            <h2>Usuario incorrecto</h2>
+            <p>¿Olvidaste tu usuario o no estás registrado?</p>
+            <button onclick="volverAIntentarlo()">Volver a intentarlo</button>
+            <button onclick="mostrarRegistro()">Registrarme</button>
+            <button onclick="usarReconocimientoFacial()">Usar reconocimiento facial</button>
+            <div id="mensaje-opciones"></div>
+        </section>
+
+        <div id="modulo-reconocimiento" style="display: none;">
+            <span class="icono-volver" title="Volver al menú de módulos">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6200ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="11" stroke="#e0e0ff" stroke-width="2.5" fill="#f6f6ff"/>
+                    <polyline points="14 8 10 12 14 16"/>
+                </svg>
+            </span>
+            <h2>Reconocimiento de imágenes/objetos</h2>
+            <input type="file" id="input-imagen" accept="image/*">
+            <button id="btn-reconocer">Reconocer imagen</button>
+            <div id="preview-imagen" style="margin-top:10px;"></div>
+            <div id="resultado-reconocimiento" style="margin-top:10px;"></div>
+        </div>
+        
+        <div id="menu-modulos" style="display: none;">
+            <button id="ir-a-consulta">Consulta tradicional</button>
+            <button id="ir-a-voz">Consulta por voz y video</button>
+            <button id="ir-a-reconocimiento">Reconocimiento de imágenes/objetos</button>
+        </div>
+        
+        <!-- Tarjeta de descripción, oculta por defecto -->
+        <div id="descripcion-container" style="display:none; margin-top: 20px; justify-content: center;">
+          <div style="background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0002; padding: 24px 32px; max-width: 400px; text-align: center;">
+            <div style="font-size: 2.5em; margin-bottom: 8px;">📝</div>
+            <h3 style="color: #4B0082; margin-bottom: 12px;">Descripción de la imagen</h3>
+            <p id="descripcion" style="font-size: 1.2em; color: #222; margin: 0;"></p>
+            <button onclick="leerDescripcion()" style="margin-top: 16px; background: #4B0082; color: #fff; border: none; border-radius: 8px; padding: 8px 16px; cursor: pointer;">
+              Escuchar descripción 🔊
+            </button>
+          </div>
+        </div>    
+        </span>
+    </main>
+    <footer>
+        <p>&copy; 2025 JD - Acompañante Virtual. Todos los derechos reservados a Jm Innovation.</p>
+    </footer>
+    
+
+    <!-- Modal de resultado, SIEMPRE al final del body -->
+<div id="modal-resultado" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#0008; justify-content:center; align-items:center; z-index:1000;">
+  <div style="background:#fff; border-radius:18px; box-shadow:0 2px 16px #0004; display:flex; flex-direction:row; padding:32px; min-width:700px; max-width:90vw; position:relative;">
+    <!-- Columna izquierda: imagen principal y relacionadas -->
+    <div style="display:flex; flex-direction:column; align-items:center; margin-right:32px;">
+      <img id="img-principal" src="" alt="Imagen principal" style="width:220px; border-radius:12px; box-shadow:0 2px 8px #0002;">
+      <div style="display:flex; gap:12px; margin-top:18px;">
+        <img id="img-relacionada-1" src="" alt="Relacionada 1" style="width:80px; border-radius:8px;" onerror="this.src='https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=80&h=80'">
+        <img id="img-relacionada-2" src="" alt="Relacionada 2" style="width:80px; border-radius:8px;" onerror="this.src='https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=80&h=80'">
+      </div>
+    </div>
+    <!-- Columna derecha: tarjeta de descripción y espectro -->
+    <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+      <div style="background:#f8f8ff; border-radius:16px; box-shadow:0 2px 8px #0002; padding:24px 32px; min-width:260px; text-align:center;">
+        <div style="font-size:2.2em; margin-bottom:8px;">📝</div>
+        <h3 style="color:#4B0082; margin-bottom:12px;">Descripción</h3>
+        <p id="descripcion-modal" style="font-size:1.2em; color:#222; margin:0 0 18px 0;"></p>
+        <div id="espectro-sonoro" style="height:32px; margin-bottom:10px;">
+          <canvas id="canvas-espectro" width="220" height="32" style="background:transparent;"></canvas>
+        </div>
+        <button onclick="leerDescripcionModal()" style="background:#4B0082; color:#fff; border:none; border-radius:8px; padding:8px 16px; cursor:pointer;">
+          Escuchar descripción 🔊
+        </button>
+      </div>
+    </div>
+    <!-- Botón de regreso centrado abajo -->
+    <div style="position:absolute; left:0; bottom:-60px; width:100%; display:flex; justify-content:center;">
+      <span class="icono-volver" title="Cerrar ventana" onclick="cerrarModal()" style="cursor:pointer; background:#fff; border-radius:50%; box-shadow:0 2px 8px #0002; padding:8px;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6200ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="11" stroke="#e0e0ff" stroke-width="2.5" fill="#f6f6ff"/>
+            <polyline points="14 8 10 12 14 16"/>
+        </svg>
+      </span>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/static/js/scripts.js"></script>
+</html>
