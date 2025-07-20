@@ -1,0 +1,339 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 3;
+    padding: 13px;
+    background-color: #53b3ee37;
+    color: #333333;
+    text-align: center;
+}
+
+header {
+    background-color: #6200ea;
+    color: white;
+    padding: 20px;
+}
+
+main {
+    margin: 20px;
+}
+
+#modulo {
+    display: none; /* Oculta el módulo de aprendizaje por defecto */   
+}
+form {
+    margin: 20px auto;
+    max-width: 400px;
+    
+}
+
+input, button {
+    padding: 14px;
+    margin: 3px;
+    width: 70%;
+    border: 3px solid #5bf263f3;
+    border-radius: 100px;
+    margin-left: -1%;
+}
+
+button {
+    background-color: #6200ea;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%; /* Mejor que 360px para responsividad */
+    border-radius: 10000px;
+    transition: background-color 0.3s ease;
+    margin: 40px 0;
+    font-size: 16px;
+    margin-left: -1%;
+}
+
+button:hover {
+    background-color: #2adf3c;
+}
+
+#respuesta-contenedor {
+    display: none;
+}
+
+#respuesta-box {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: 0 0 340px;
+    max-width: 340px;
+    min-width: 220px;
+}
+
+#sujeto-pregunta {
+    font-family: 'Lucida Sans', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida', Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #c52525;
+    background: #43d12f;
+    padding: 8px 18px;
+    border-radius: 12px 12px 0 0;
+    margin-bottom: 0;
+    box-shadow: 0 2px 8px #0001;
+    text-align: left;
+    letter-spacing: 1px;
+    width: 100%;
+    display: block;
+}
+
+#respuesta {
+    font-size: 12px;
+    font-family: 'Lucida Sans', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida', Arial, sans-serif;
+    color: #222;
+    font-weight: 500;
+    background: #fff;
+    padding: 24px 18px;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 2px 12px #0002;
+    word-break: break-word;
+    border: 2px solid #5bf263f3;
+    border-top: none;
+    margin-right: 0;
+}
+
+
+#imagenes img {
+    width: 140px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #0002;
+    margin-bottom: 10px;
+    background: #fff;
+    padding: 4px;
+    border: 1px solid #e0e0e0;
+}
+
+#mensaje {
+    color: rgba(255, 0, 0, 0.683);
+    font-weight: bold;
+    margin-top: 10px;
+}
+/* Estilos para pantallas pequeñas (móviles) */
+@media (max-width: 768px) {
+    body {
+        text-align: relative; /* Centra el contenido en pantallas pequeñas */
+        padding: 10px;
+    }
+    @media (max-width: 480px) {
+    /* Estilos para pantallas muy pequeñas */
+}
+    form {
+        margin: 10px auto; /* Centra el formulario */
+        max-width: 90%; /* Reduce el ancho del formulario */
+        margin-left: 6%; /* Elimina el desplazamiento hacia la izquierda */
+    }
+    button {
+        width: 100%; /* Botón ocupa todo el ancho */
+        margin: 9px 0; /* Espaciado uniforme */
+        margin-left: -1%; 
+        margin-right: -1%;/* Ajusta este valor para moverlo más a la derecha */
+    }
+
+    #respuesta, #mensaje {
+        font-size: 1em; /* Ajusta el tamaño del texto */
+        margin-top: 13px;
+    }
+    #respuesta-contenedor {
+        flex-direction: row; /* <-- Cambia de column a row */
+        gap: 10px;
+        align-items: flex-start;
+    }
+    #imagenes {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    #imagenes img {
+        width: 80px;
+        margin-bottom: 0px;
+    }
+}
+
+@media (max-width: 700px) {
+  #modal-resultado > div {
+    flex-direction: column !important;
+    min-width: 90vw !important;
+    max-width: 98vw !important;
+    padding: 12px !important;
+  }
+  #modal-resultado img.img-principal {
+    width: 140px !important;
+    margin-bottom: 12px;
+  }
+  #modal-resultado .descripcion-tarjeta {
+    min-width: unset !important;
+    width: 100% !important;
+    padding: 16px 8px !important;
+  }
+  #modal-resultado .relacionadas {
+    gap: 6px !important;
+    margin-top: 10px !important;
+  }
+
+  #modal-resultado .icono-volver {
+    font-size: 1em !important;
+    padding: 8px 10px !important;
+  }
+}
+
+.icono-volver {
+    display: inline-block;
+    cursor: pointer;
+    margin: 10px 0 10px 10px;
+    transition: transform 0.2s, background 0.2s;
+    border-radius: 50%;
+    padding: 4px;
+    background: #7b26eb;
+}
+.icono-volver:hover {
+    background: #4848c0;
+    transform: scale(1.15);
+}
+
+/* Centrado perfecto del botón dentro del fondo circular */
+
+#btn-validar-usuario {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 80px;
+  border-radius: 50%;
+  border: 18px solid #15f1a8;
+  background: #8988dd;
+  box-shadow: 0 2px 8px #3ef77c;
+  transition: box-shadow 0.3s, background 0.2s;
+  margin: 32px auto 0 auto ;
+  font-size: 1.1em;
+  color: #001f4d;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+       .fingerprint-svg {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .fingerprint-svg:hover {
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
+        }
+        .fingerprint-svg:active {
+            transform: scale(0.95);
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+ 
+#btn-validar-usuario:hover{
+  background: linear-gradient(135deg, #5478a0cc, #717072);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(77, 240, 112, 0.2);
+}
+
+button:hover {
+  transform: scale(2.05);
+  box-shadow: 0 6px 14px rgba(76, 252, 90, 0.3);
+}
+/* CYBERPUNK: huella + láser */
+#btn-validar-usuario {
+  background-color: #63f8a1;
+  color: #fff;
+  padding: 70px 100px;
+  border: 2px solid #5c25db;
+  font-size: 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.huella-animada {
+  font-size: 60px;
+  color: #461ed6;
+  animation: pulseNeon 3s infinite ease-in-out;
+  margin-left: 10%;
+  
+}
+
+@keyframes pulseNeon {
+  0%, 100% {
+    text-shadow: 0 0 5px #f72585, 0 0 15px #f72585, 0 0 30px #ff00cc;
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 10px #f72585, 0 0 20px #ff00cc;
+    transform: scale(1.1);
+  }
+}
+
+/* Láser */
+.laser {
+  position: absolute;
+  top: -50%;
+  left: 0;
+  width: 110%;
+  height: 9px;
+  background: linear-gradient(to right, transparent, #38b166, #5c0c91, transparent);
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.scan-laser {
+  animation: laserScan 1.5s ease-in-out forwards;
+}
+
+@keyframes laserScan {
+  0% {
+    top: -50%;
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  50% {
+    top: 50%;
+    opacity: 1;
+  }
+  80% {
+    top: 120%;
+    opacity: 0.5;
+  }
+  100% {
+    top: 200%;
+    opacity: 0;
+  }
+}
+
+
+
+
+
+
