@@ -3,6 +3,9 @@ import openai
 import requests
 import cohere
 import os
+from dotenv import load_dotenv
+import os
+load_dotenv()
 from PIL import Image
 from ultralytics import YOLO
 from fido2.server import Fido2Server
