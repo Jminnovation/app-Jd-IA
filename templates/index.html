@@ -10,17 +10,18 @@
 </head>
 <body>
     <header>
-        <h1>¡Bienvenido a Jd!</h1>
+        <h1>¡Bienvenido a!</h1>
+        <img src="{{ url_for('static', filename='uploads/logo.jpeg') }}" alt="Imagen desde uploads" width="80">
         <p>Tu acompañante virtual .</p>
     </header>
+
     <main>
         <section id="login">
-          <div style="height: 20px;"></div>
+          <div style="height: -3px;"></div>
             <h2>Iniciar sesión</h2>
             <input type="text" id="usuario" placeholder="Usuario">
             <div style="height: 30px;"></div>
-
-
+          
 <!-- Botón con huella y láser -->
 <button onclick="validarUsuario()" id="btn-validar-usuario" type="button">
   <span class="huella-container">

@@ -11,6 +11,14 @@ from ultralytics import YOLO
 from fido2.server import Fido2Server
 from fido2.webauthn import PublicKeyCredentialRpEntity
 from fido2.utils import websafe_encode, websafe_decode
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 
 # 🔐 Carga claves desde variables de entorno
 openai.api_key = os.getenv("OPENAI_API_KEY")
