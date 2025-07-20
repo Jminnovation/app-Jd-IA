@@ -111,6 +111,7 @@
             <h2>Reconocimiento de imágenes/objetos</h2>
             <input type="file" id="input-imagen" accept="image/*">
             <button id="btn-reconocer">Reconocer imagen</button>
+            <img src="{{ url_for('static', filename='uploads/Jd.jpg') }}" alt="Imagen desde uploads" width="80">
             <div id="preview-imagen" style="margin-top:10px;"></div>
             <div id="resultado-reconocimiento" style="margin-top:10px;"></div>
         </div>
