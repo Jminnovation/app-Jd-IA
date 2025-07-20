@@ -14,7 +14,6 @@
         <img src="{{ url_for('static', filename='uploads/logo.jpeg') }}" alt="Imagen desde uploads" width="80">
         <p>Tu acompañante virtual .</p>
     </header>
-      <img src="{{ url_for('static', filename='uploads/Sentado.jpeg') }}" alt="Imagen desde uploads" width="80">
     <main>
         <section id="login">
           <div style="height: -3px;"></div>
@@ -59,6 +58,8 @@
                 <label for="pregunta">Hazme tu consulta:</label>
                 <input type="text" id="pregunta" placeholder="?" />
                 <button type="submit">Enviar</button>
+                 <div style="height:10px"></div>
+                <img src="{{ url_for('static', filename='uploads/Sentado.jpeg') }}" alt="Imagen desde uploads" width="80">
             </form>
             <div id="respuesta-contenedor">
                 <div id="respuesta-box">
@@ -86,6 +87,7 @@
                 </svg>
             </span>
             <button id="btn-voz">Hablame... !</button>
+            <img src="{{ url_for('static', filename='uploads/Planeta.jpg') }}" alt="Imagen desde uploads" width="80">
             <span id="texto-voz"></span>
             <div id="video-respuesta" style="margin-top:20px;"></div>
         </div>
