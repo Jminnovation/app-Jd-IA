@@ -21,12 +21,37 @@ const traduccionesYOLO = {
 async function validarUsuario() {
     const usuario = document.getElementById("usuario").value;
     const mensajeDiv = document.getElementById("mensaje-usuario");
-    
+    const beep = document.getElementById("sonido-beep");
+beep.play().catch(e => console.log("🔇 Error de reproducción:", e));
+    const btn = document.getElementById("btn-validar-usuario");
+    const huella = document.getElementById("icono-huella");
+    const laser = document.querySelector(".laser");
+    const textoBoton = document.getElementById("texto-boton");
+
+
+
+    // 🔸 Mostrar animación de escaneo (no interrumpe nada)
+    btn.disabled = true;
+    laser.classList.add("scan-laser");
+    textoBoton.textContent = "Escaneando...";
+    huella.style.color = "#00ff95";
+
+    // Espera visual de escaneo antes de validar (sin bloquear nada real)
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // 🔹 VALIDACIÓN REAL
     if (!usuario) {
         mensajeDiv.textContent = "Por favor, ingresa un usuario.";
         mensajeDiv.style.color = "red";
-        return; // Detén la ejecución si el campo está vacío
+
+        // 🔹 Restaurar interfaz si falla
+        textoBoton.textContent = "NO,HAY REGISTRO!!"
+        btn.disabled = false;
+        laser.classList.remove("scan-laser");
+        huella.style.color = "white";
+        return;
     }
+
     try {
         const response = await fetch("/validar_usuario", {
             method: "POST",
@@ -37,9 +62,7 @@ async function validarUsuario() {
         const data = await response.json();
         mensajeDiv.textContent = data.mensaje;
 
-        if (data.valido) {
-            mensajeDiv.style.color = "green";
-            document.getElementById("login").style.display = "none";
+        if (data.valido) {document.getElementById("login").style.display = "none";
             document.getElementById("menu-modulos").style.display = "block";
             document.getElementById("modulo").style.display = "none";
             document.getElementById("modulo-video-voz").style.display = "none";
@@ -47,6 +70,7 @@ async function validarUsuario() {
             document.getElementById("ventana-respuesta").style.display = "none";
         } else {
             mensajeDiv.style.color = "red";
+            textoBoton.textContent = "Usuario Incorrecto";
             document.getElementById("login").style.display = "none";
             document.getElementById("opciones-usuario-incorrecto").style.display = "block";
         }
@@ -71,6 +95,18 @@ async function registrarUsuario() {
 
         const data = await response.json();
         mensajeDiv.textContent = data.mensaje;
+        // Después de registrar, volver al login y limpiar todo
+        setTimeout(() => {
+            document.getElementById("registro").style.display = "none";
+            document.getElementById("login").style.display = "block";
+            document.getElementById("usuario").value = "";
+            document.getElementById("mensaje-usuario").textContent = "";
+            const btn = document.getElementById("btn-validar-usuario");
+            if(btn) {
+              btn.disabled = false;
+              if(document.getElementById("texto-boton")) document.getElementById("texto-boton").textContent = "Validar usuario";
+            }
+        }, 1200);
     } catch (error) {
         mensajeDiv.textContent = "Error al registrar el usuario.";
     }
@@ -80,6 +116,15 @@ async function registrarUsuario() {
 function volverAIntentarlo() {
     document.getElementById("opciones-usuario-incorrecto").style.display = "none";
     document.getElementById("login").style.display = "block";
+    // Limpia campo y mensaje
+    document.getElementById("usuario").value = "";
+    document.getElementById("mensaje-usuario").textContent = "";
+    // Habilita el botón y restaura texto si aplica
+    const btn = document.getElementById("btn-validar-usuario");
+    if(btn) {
+      btn.disabled = false;
+      if(document.getElementById("texto-boton")) document.getElementById("texto-boton").textContent = "Validar usuario";
+    }
 }
 
 // Mostrar formulario de registro
@@ -533,65 +578,3 @@ document.getElementById("btn-dactilar").onclick = async function() {
         mensaje.style.color = "red";
     }
 };
-
-async function validarUsuario() {
-    const usuario = document.getElementById("usuario").value;
-    const mensajeDiv = document.getElementById("mensaje-usuario");
-    const beep = document.getElementById("sonido-beep");
-beep.play().catch(e => console.log("🔇 Error de reproducción:", e));
-    const btn = document.getElementById("btn-validar-usuario");
-    const huella = document.getElementById("icono-huella");
-    const laser = document.querySelector(".laser");
-    const textoBoton = document.getElementById("texto-boton");
-
-
-
-    // 🔸 Mostrar animación de escaneo (no interrumpe nada)
-    btn.disabled = true;
-    laser.classList.add("scan-laser");
-    textoBoton.textContent = "Escaneando.";
-    huella.style.color = "#00ff95";
-
-    // Espera visual de escaneo antes de validar (sin bloquear nada real)
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // 🔹 VALIDACIÓN REAL
-    if (!usuario) {
-        mensajeDiv.textContent = "Por favor, ingresa un usuario.";
-        mensajeDiv.style.color = "red";
-
-        // 🔹 Restaurar interfaz si falla
-        textoBoton.textContent = "NO,HAY REGISTRO !!";
-        btn.disabled = false;
-        laser.classList.remove("scan-laser");
-        huella.style.color = "white";
-        return;
-    }
-
-    try {
-        const response = await fetch("/validar_usuario", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ usuario }),
-        });
-
-        const data = await response.json();
-        mensajeDiv.textContent = data.mensaje;
-
-        if (data.valido) {document.getElementById("login").style.display = "none";
-            document.getElementById("menu-modulos").style.display = "block";
-            document.getElementById("modulo").style.display = "none";
-            document.getElementById("modulo-video-voz").style.display = "none";
-            document.getElementById("modulo-reconocimiento").style.display = "none";
-            document.getElementById("ventana-respuesta").style.display = "none";
-        } else {
-            mensajeDiv.style.color = "red";
-            textoBoton.textContent = "Usuario Incorrecto";
-            document.getElementById("login").style.display = "none";
-            document.getElementById("opciones-usuario-incorrecto").style.display = "block";
-        }
-    } catch (error) {
-        mensajeDiv.textContent = "Error al validar el usuario.";
-        mensajeDiv.style.color = "red";
-    }
-}
