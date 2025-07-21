@@ -210,17 +210,13 @@ import os
 
 app = Flask(__name__)
 
-@app.route('/')
-def inicio():
-    return render_template("index.html")
-
-@app.before_first_request
 def generar_qr_oculto():
-    contenido = "https://950eb5b12afa.ngrok-free.app/"  # tu URL privada
+    contenido = "https://950eb5b12afa.ngrok-free.app/"
     ruta_salida = os.path.join('static', 'codigo_qr.png')
 
-    # Solo lo genera si no existe aún
-    if not os.path.exists(ruta_salida):
+    # Siempre lo regenera por seguridad
+    try:
+        print(f"📦 Guardando QR en: {ruta_salida}")
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -232,5 +228,15 @@ def generar_qr_oculto():
 
         imagen = qr.make_image(fill_color="black", back_color="white")
         imagen.save(ruta_salida)
-        print("✅ Código QR generado y guardado como 'static/codigo_qr.png'")
+        print("✅ QR generado correctamente.")
+    except Exception as e:
+        print("❌ Error generando el QR:", e)
+
+# Generar QR al inicio del servidor
+generar_qr_oculto()
+
+@app.route('/')
+def inicio():
+    return render_template("index.html")
+
 
