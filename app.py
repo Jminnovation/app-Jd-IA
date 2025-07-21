@@ -12,6 +12,8 @@ from fido2.server import Fido2Server
 from fido2.webauthn import PublicKeyCredentialRpEntity
 from fido2.utils import websafe_encode, websafe_decode
 from flask import Flask, render_template
+import sys
+print("Python version:", sys.version)
 
 app = Flask(__name__)
 
