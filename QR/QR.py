@@ -2,7 +2,7 @@
 import qrcode
 
 # Contenido del código QR
-contenido = "https://7bbe-179-19-62-81.ngrok-free.app/"
+contenido = "https://950eb5b12afa.ngrok-free.app/"
 
 # Crear el código QR
 qr = qrcode.QRCode(
