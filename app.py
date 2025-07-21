@@ -204,35 +204,28 @@ def webauthn_authenticate_complete():
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=False)
 
-from flask import Flask, render_template
+from flask import Flask, send_file
 import qrcode
-import os
+from io import BytesIO
 
 app = Flask(__name__)
 
-@app.route('/')
-def inicio():
-    return render_template("index.html")
-
-# ✅ Generar QR inmediatamente al cargar el archivo (no esperar ni rutas)
-contenido = "https://950eb5b12afa.ngrok-free.app/"
-ruta_salida = os.path.join('static', 'codigo_qr.png')
-
-try:
-    print(f"🧪 Intentando guardar QR en: {ruta_salida}")
+@app.route('/descargar_qr_privado')
+def descargar_qr():
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=8,
         border=6,
     )
-    qr.add_data(contenido)
+    qr.add_data("https://950eb5b12afa.ngrok-free.app/")
     qr.make(fit=True)
 
     imagen = qr.make_image(fill_color="black", back_color="white")
-    imagen.save(ruta_salida)
-    print("✅ QR generado correctamente.")
-except Exception as e:
-    print("❌ Error generando el QR:", e)
+    buffer = BytesIO()
+    imagen.save(buffer, format="PNG")
+    buffer.seek(0)
+
+    return send_file(buffer, mimetype='image/png', as_attachment=True, download_name='codigo_qr.png')
 
 
