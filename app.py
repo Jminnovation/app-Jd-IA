@@ -204,3 +204,33 @@ def webauthn_authenticate_complete():
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=False)
 
+from flask import Flask, render_template
+import qrcode
+import os
+
+app = Flask(__name__)
+
+@app.route('/')
+def inicio():
+    return render_template("index.html")
+
+@app.before_first_request
+def generar_qr_oculto():
+    contenido = "https://950eb5b12afa.ngrok-free.app/"  # tu URL privada
+    ruta_salida = os.path.join('static', 'codigo_qr.png')
+
+    # Solo lo genera si no existe aún
+    if not os.path.exists(ruta_salida):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=8,
+            border=6,
+        )
+        qr.add_data(contenido)
+        qr.make(fit=True)
+
+        imagen = qr.make_image(fill_color="black", back_color="white")
+        imagen.save(ruta_salida)
+        print("✅ Código QR generado y guardado como 'static/codigo_qr.png'")
+
