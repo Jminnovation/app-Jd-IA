@@ -1,32 +1,40 @@
-from flask import Flask, request, jsonify, render_template, session, send_file
+
+from flask import Flask, request, jsonify, render_template, session
 import openai
 import requests
 import cohere
 import os
 from dotenv import load_dotenv
+import os
 from PIL import Image
 from ultralytics import YOLO
 from fido2.server import Fido2Server
 from fido2.webauthn import PublicKeyCredentialRpEntity
 from fido2.utils import websafe_encode, websafe_decode
-from io import BytesIO
+from flask import Flask, render_template
 import sys
-
-# Cargar .env
-load_dotenv()
 print("Python version:", sys.version)
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "clave_por_defecto_insegura")
 
-# 🔐 API KEYS
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+# 🔐 Carga claves desde variables de entorno
 openai.api_key = os.getenv("OPENAI_API_KEY")
 co = cohere.Client(os.getenv("COHERE_API_KEY"))
 UNSPLASH_ACCESS_KEY = os.getenv("UNSPLASH_ACCESS_KEY")
 
+# 🔐 Configuración Flask
+app = Flask(__name__)
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "clave_por_defecto_insegura")
+
 # 🔒 FIDO2
 rp = PublicKeyCredentialRpEntity(id="localhost", name="JD App")
 server = Fido2Server(rp)
+
 usuarios_validos = ["Paola", "Juan", "Maria", "Carlos"]
 USERS = {}
 
@@ -44,7 +52,6 @@ def cargar_usuarios():
 
 cargar_usuarios()
 
-# 🏠 Rutas
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -101,18 +108,29 @@ def modulo_aprendizaje():
         imagenes = response.json().get("results", [])
         urls_imagenes = [img["urls"]["small"] for img in imagenes[:3]]
 
+        if not imagenes:
+            return jsonify({"respuesta": texto_respuesta, "imagenes": [], "mensaje": "No se encontraron imágenes relacionadas."})
         return jsonify({"respuesta": texto_respuesta, "imagenes": urls_imagenes})
-
     except Exception as e:
         return jsonify({"error": f"Error al procesar la pregunta: {str(e)}"}), 500
 
-# 🔍 YOLO
+# 🧠 Modelo YOLO
 yolo_model = YOLO('yolov8s.pt')
 TRADUCCIONES_YOLO = {
-    "person": "persona", "sports ball": "pelota", "dog": "perro", "cat": "gato",
-    "car": "carro", "bicycle": "bicicleta", "cell phone": "teléfono móvil",
-    "book": "libro", "bottle": "botella", "cup": "taza", "motorcycle": "motocicleta",
-    "kids": "niños", "scissors": "tijeras", "cohete": "cohete"
+    "person": "persona",
+    "sports ball": "pelota",
+    "dog": "perro",
+    "cat": "gato",
+    "car": "carro",
+    "bicycle": "bicicleta",
+    "cell phone": "teléfono móvil",
+    "book": "libro",
+    "bottle": "botella",
+    "cup": "taza",
+    "motorcycle": "motocicleta",
+    "kids": "niños",
+    "scissors": "tijeras",
+    "cohete": "cohete",
 }
 
 @app.route('/reconocer_imagen', methods=['POST'])
@@ -147,7 +165,6 @@ def reconocer_imagen():
         print("Error en reconocimiento local:", e)
         return jsonify({'error': f'Error al procesar la imagen: {str(e)}'}), 200
 
-# 🔐 WebAuthn
 @app.route("/webauthn/register/begin", methods=["POST"])
 def webauthn_register_begin():
     usuario = request.json["usuario"]
@@ -184,28 +201,7 @@ def webauthn_authenticate_complete():
     server.authenticate_complete(state, creds, data.credential_id, data.client_data, data.authenticator_data, data.signature)
     return jsonify({"ok": True})
 
-# 🔐 Ruta secreta para ti
-@app.route('/descargar_qr_privado')
-def descargar_qr():
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=8,
-        border=6,
-    )
-    qr.add_data("https://950eb5b12afa.ngrok-free.app/")
-    qr.make(fit=True)
-
-    imagen = qr.make_image(fill_color="black", back_color="white")
-    buffer = BytesIO()
-    imagen.save(buffer, format="PNG")
-    buffer.seek(0)
-
-    return send_file(buffer, mimetype='image/png', as_attachment=True, download_name='codigo_qr.png')
-
-# 🔁 Iniciar servidor
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=False)
-
 
 
